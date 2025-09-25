@@ -9,6 +9,11 @@
       href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap"
       rel="stylesheet"
     />
+    <!-- Font Awesome for mute icon -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
     <script defer src="script.js"></script>
   </head>
   <body>
@@ -17,6 +22,9 @@
       src="https://hc-cdn.hel1.your-objectstorage.com/s/v3/544afb22399436095b58313fb6c01b2c8ff3b85a_midsummer-garden-201625_audio.mp4"
       loop
     ></audio>
+    <button id="mute-btn" class="mute-btn" aria-label="Mute/Unmute">
+      <i class="fa-solid fa-volume-high"></i>
+    </button>
     <div class="intro-screen">
       <div class="intro-content">
         <h3>You just landed on</h3>
@@ -33,7 +41,11 @@
     <div class="curtain curtain-hidden">
       <div class="curtain-left"></div>
       <div class="curtain-right"></div>
-      <div class="curtain-text">tap to continue</div>
+      <div class="curtain-message">
+        Are the tree's whispers nonsense, or are they actually the guide to the
+        <strong>Tree of Wisdom</strong>?
+      </div>
+      <div class="curtain-text">Tap to continue</div>
     </div>
   </body>
 </html>
