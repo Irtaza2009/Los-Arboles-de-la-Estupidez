@@ -11,6 +11,7 @@ body {
   background: url("https://hc-cdn.hel1.your-objectstorage.com/s/v3/fbad009f4b5c9f0afdd307c92d119792be2777d4__e0cbe516-8cd2-4faf-8a09-1bad815bf8a6__3_.jpg")
     center center / cover no-repeat fixed;
   font-family: 'Pixelify Sans', sans-serif;
+    overflow: hidden;
 }
 
 /* Intro screen styles */
@@ -203,4 +204,131 @@ body {
   color: #f6e7c8;
   font-weight: 700;
   letter-spacing: 0.04em;
+}
+
+/* Orbs */
+.orb {
+position: absolute;
+background: #f3df6a;
+border-radius: 50%;
+opacity: 0.8;
+width: 8px;
+height: 8px;
+animation: drift 15s infinite;
+filter: blur(0.8px);
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translate(80px, -50px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-60px, 120px);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translate(100px, 250px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-100px, 400px);
+    opacity: 0.8;
+  }
+}
+
+#orb-counter {
+    position: fixed;
+    bottom: 24px;
+    right: 32px;
+    z-index: 3000;
+    color: #f6e7c8;
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 1.2rem;
+    background: rgba(24, 20, 28, 0.7);
+    padding: 8px 18px;
+    border-radius: 14px;
+    border: 1px solid #222;
+}
+
+#orb-counter.has-info {
+  position: fixed;
+  bottom: 24px;
+  right: 32px;
+  z-index: 3000;
+  color: #f6e7c8;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1.2rem;
+  background: rgba(24,20,28,0.7);
+  padding: 8px 18px;
+  border-radius: 14px;
+  border: 1px solid #222;
+  cursor: pointer;
+}
+
+.orb-info-popup {
+  display: none;
+  position: absolute;
+  bottom: 110%;
+  right: 0;
+  background: rgba(24, 20, 28, 0.8);
+  color: #ffe97a;
+  font-family: 'Pixelify Sans', sans-serif;
+  font-size: 1rem;
+  padding: 10px 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #18141c55;
+  border: 1px solid #ffe97a;
+  white-space: nowrap;
+  opacity: 0.95;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+#orb-counter.has-info:hover .orb-info-popup,
+#orb-counter.has-info:focus .orb-info-popup {
+  display: block;
+}
+
+/* Pixel Sparks */
+.spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #f3df6a;
+    opacity: 1;
+    border-radius: 1px;
+    pointer-events: none;
+    animation: spark-fly 600ms forwards;
+}
+
+@keyframes spark-fly {
+to {
+    transform: translate(var(--dx), var(--dy));
+    opacity: 0;
+}
+}
+
+.hint-bubble {
+  color: #ffe97a !important;
+  font-weight: bold;
+  text-shadow: 0 0 8px #f3df6a88;
+  border-color: #ffe97a;
+  background: rgba(40, 32, 8, 0.98);
+}
+
+.orb-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+    background: #f3df6a;
+    border-radius: 50%;
+    opacity: 0.8;
+    width: 8px;
+    height: 8px;
+    filter: blur(0.8px);
 }
