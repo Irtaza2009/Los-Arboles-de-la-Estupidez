@@ -1,18 +1,26 @@
-// done: orbs
-// done: orbs count
-// done: sound effects
-// done: tree hints with brighter text
-// done: orb counter info note
-// todo: wisdom tree
-// todo: link to other scenes
+// done: wisdom tree
+// done: wisdom curtain
+// done: link to other scenes
+// done: load images in bg
+// todo: wisdom tree quote
+// todo: quote bubble shape improvements
 
 window.addEventListener('DOMContentLoaded', function() {
+  // Preload both background images
+  const preloadBg1 = new Image();
+  preloadBg1.src = "https://hc-cdn.hel1.your-objectstorage.com/s/v3/fbad009f4b5c9f0afdd307c92d119792be2777d4__e0cbe516-8cd2-4faf-8a09-1bad815bf8a6__3_.jpg";
+  const preloadBg2 = new Image();
+  preloadBg2.src = "https://hc-cdn.hel1.your-objectstorage.com/s/v3/3d204b2a7b357e40fab88e9d7c95d78fb17b49f6__6a88aa72-b954-4175-a911-08eceab5ad37__1_.jpg";
+
   const introScreen = document.querySelector('.intro-screen');
   const introBtn = document.querySelector('.intro-btn');
   const curtain = document.querySelector('.curtain');
   const bgMusic = document.getElementById('bg-music');
   const muteBtn = document.getElementById('mute-btn');
   const muteIcon = muteBtn.querySelector('i');
+  const wisdomCurtain = document.querySelector('.wisdom-curtain');
+
+  let thoughtBubbleInterval = null;
 
   introBtn.addEventListener('click', function() {
     introScreen.style.display = 'none';
@@ -76,11 +84,22 @@ window.addEventListener('DOMContentLoaded', function() {
   let lastTreeIndex = null;
 
   function startThoughtBubbles() {
-    setInterval(() => {
+    // Save interval so we can clear it later
+    thoughtBubbleInterval = setInterval(() => {
       if (!bubbleActive) {
         spawnBubble();
       }
     }, 2200 + Math.random() * 1800);
+  }
+
+  function stopThoughtBubbles() {
+    if (thoughtBubbleInterval) {
+      clearInterval(thoughtBubbleInterval);
+      thoughtBubbleInterval = null;
+    }
+    // Remove any remaining bubbles
+    document.querySelectorAll('.thought-bubble').forEach(b => b.remove());
+    bubbleActive = false;
   }
 
   function spawnBubble() {
@@ -134,83 +153,111 @@ window.addEventListener('DOMContentLoaded', function() {
     }
     type();
   }
-});
 
-// Orb
+  // Orb
 
-let orbClicks = 0; // counter
+  let orbClicks = 0; // counter
 
-function spawnOrb(delay = 0) {
-  const orb = document.createElement("div");
-  orb.classList.add("orb");
+  function spawnOrb(delay = 0) {
+    const orb = document.createElement("div");
+    orb.classList.add("orb");
 
-  // random position, keep orb inside viewport
-  orb.style.top = `${10 + Math.random() * 75}%`;
-  orb.style.left = `${10 + Math.random() * 75}%`;
+    // random position, keep orb inside viewport
+    orb.style.top = `${10 + Math.random() * 75}%`;
+    orb.style.left = `${10 + Math.random() * 75}%`;
 
-  // random animation offset
-  orb.style.animationDelay = `${Math.random() * 10}s`;
+    // random animation offset
+    orb.style.animationDelay = `${Math.random() * 10}s`;
 
-  setTimeout(() => {
-    document.body.appendChild(orb);
+    setTimeout(() => {
+      document.body.appendChild(orb);
 
-    orb.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const rect = orb.getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
+      orb.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const rect = orb.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
 
-      // remove orb
-      orb.remove();
+        // remove orb
+        orb.remove();
 
-      // play sparkle sound
-      const sparkle = new Audio("https://hc-cdn.hel1.your-objectstorage.com/s/v3/01a8c2f72077d10dbd075ae7c010b07dd2ce5984_sparkle_audio.mp4");
-      sparkle.volume = 0.9;
-      sparkle.play().catch(() => {});
+        // play sparkle sound
+        const sparkle = new Audio("https://hc-cdn.hel1.your-objectstorage.com/s/v3/01a8c2f72077d10dbd075ae7c010b07dd2ce5984_sparkle_audio.mp4");
+        sparkle.volume = 0.9;
+        sparkle.play().catch(() => {});
 
-      // update counter (only the number)
-      orbClicks++;
-      const counter = document.getElementById("orb-counter");
-      if (counter) {
-        // Find the text node after .orb-icon
-        const numberNode = counter.querySelector(".orb-count");
-        if (numberNode) {
-          numberNode.textContent = orbClicks;
+        // update counter (only the number)
+        orbClicks++;
+        const counter = document.getElementById("orb-counter");
+        if (counter) {
+          const numberNode = counter.querySelector(".orb-count");
+          if (numberNode) {
+            numberNode.textContent = orbClicks;
+          }
         }
-      }
 
-      // Wisdom tree logic (will add later on)
-      if (orbClicks === 10) {
-        
-      }
+        // Wisdom tree logic
+        if (orbClicks === 5) {
+          // Remove all orbs and orb counter
+          document.querySelectorAll('.orb').forEach(o => o.remove());
+          if (counter) counter.style.display = 'none';
 
-      // create sparks
-      for (let i = 0; i < 8; i++) {
-        const spark = document.createElement("div");
-        spark.classList.add("spark");
-        document.body.appendChild(spark);
+          // Stop thought bubbles
+          stopThoughtBubbles();
 
-        spark.style.left = `${x}px`;
-        spark.style.top = `${y}px`;
+          // Show wisdom curtain
+          wisdomCurtain.classList.remove('curtain-hidden');
 
-        const angle = (i / 8) * (2 * Math.PI);
-        const distance = 30 + Math.random() * 20;
-        const dx = Math.cos(angle) * distance;
-        const dy = Math.sin(angle) * distance;
+          // When user taps wisdom curtain, do curtain reveal and change background
+          wisdomCurtain.addEventListener('click', function wisdomCurtainHandler() {
+            wisdomCurtain.classList.add('open');
+            setTimeout(() => {
+              wisdomCurtain.style.display = 'none';
+              // Change background image
+              document.body.style.backgroundImage = 'url("https://hc-cdn.hel1.your-objectstorage.com/s/v3/3d204b2a7b357e40fab88e9d7c95d78fb17b49f6__6a88aa72-b954-4175-a911-08eceab5ad37__1_.jpg")';
+              showWisdomTreeLinks();
+            }, 1200);
+            // Remove this event listener after first tap
+            wisdomCurtain.removeEventListener('click', wisdomCurtainHandler);
+          });
+        }
 
-        spark.style.setProperty("--dx", `${dx}px`);
-        spark.style.setProperty("--dy", `${dy}px`);
+        // create sparks
+        for (let i = 0; i < 8; i++) {
+          const spark = document.createElement("div");
+          spark.classList.add("spark");
+          document.body.appendChild(spark);
 
-        setTimeout(() => spark.remove(), 600);
-      }
+          spark.style.left = `${x}px`;
+          spark.style.top = `${y}px`;
 
-      // respawn another after 2s
-      spawnOrb(2000);
-    });
-  }, delay);
-}
+          const angle = (i / 8) * (2 * Math.PI);
+          const distance = 30 + Math.random() * 20;
+          const dx = Math.cos(angle) * distance;
+          const dy = Math.sin(angle) * distance;
 
-// Initial Orbs
-spawnOrb();
-spawnOrb();
-spawnOrb();
+          spark.style.setProperty("--dx", `${dx}px`);
+          spark.style.setProperty("--dy", `${dy}px`);
+
+          setTimeout(() => spark.remove(), 600);
+        }
+
+        // respawn another after 2s
+        if (orbClicks < 10) spawnOrb(2000);
+      });
+    }, delay);
+  }
+
+  function showWisdomTreeLinks() {
+    document.querySelector('.wisdom-tree-links').style.display = 'block';
+  }
+
+  function hideWisdomTreeLinks() {
+    document.querySelector('.wisdom-tree-links').style.display = 'none';
+  }
+
+  // Initial Orbs
+  spawnOrb();
+  spawnOrb();
+  spawnOrb();
+});
