@@ -465,3 +465,43 @@ to {
   pointer-events: none;
   z-index: 10;
 }
+
+.wisdom-bubble {
+  background: rgba(40, 32, 8, 0.95);
+  border: 2px solid #ffe97a;
+  color: #ffe97a;
+  font-weight: bold;
+  text-shadow: 0 0 10px #f3df6a;
+  max-width: 320px;
+  text-align: left;
+}
+
+/* Triangle pointing right (for left trees) */
+.thought-bubble.bubble-left::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 20px;
+  border-width: 8px 12px 8px 0;
+  border-style: solid;
+  border-color: transparent rgba(24, 20, 28, 0.9) transparent transparent;
+}
+
+/* Triangle pointing left (for right trees) */
+.thought-bubble.bubble-right::before {
+  content: "";
+  position: absolute;
+  right: -12px;
+  top: 20px;
+  border-width: 8px 0 8px 12px;
+  border-style: solid;
+  border-color: transparent transparent transparent rgba(24, 20, 28, 0.9);
+}
+
+/* Keep border for hint bubbles */
+.hint-bubble.bubble-left::before {
+  border-color: transparent rgba(40, 32, 8, 0.98) transparent transparent;
+}
+.hint-bubble.bubble-right::before {
+  border-color: transparent transparent transparent rgba(40, 32, 8, 0.98);
+}

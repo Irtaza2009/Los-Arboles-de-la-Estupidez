@@ -1,9 +1,5 @@
-// done: wisdom tree
-// done: wisdom curtain
-// done: link to other scenes
-// done: load images in bg
-// todo: wisdom tree quote
-// todo: quote bubble shape improvements
+// done: wisdom tree text
+// done: quote bubble shape improvements
 
 window.addEventListener('DOMContentLoaded', function() {
   // Preload both background images
@@ -26,7 +22,7 @@ window.addEventListener('DOMContentLoaded', function() {
     introScreen.style.display = 'none';
     curtain.classList.remove('curtain-hidden');
     // Start background music
-    bgMusic.volume = 0.5;
+    bgMusic.volume = 0.8;
     bgMusic.play();
   });
 
@@ -122,6 +118,15 @@ window.addEventListener('DOMContentLoaded', function() {
     const bubble = document.createElement('div');
     bubble.className = 'thought-bubble';
     if (isHint) bubble.classList.add('hint-bubble');
+
+    // Left or right side indicator
+    if (pos.left) {
+      bubble.classList.add('bubble-left');
+    } else if (pos.right) {
+      bubble.classList.add('bubble-right');
+    }
+
+
     // Position bubble
     Object.entries(pos).forEach(([key, value]) => {
       bubble.style[key] = value;
@@ -134,6 +139,8 @@ window.addEventListener('DOMContentLoaded', function() {
     const span = document.createElement('span');
     bubble.appendChild(span);
     document.body.appendChild(bubble);
+
+    
 
     let i = 0;
     function type() {
@@ -248,9 +255,41 @@ window.addEventListener('DOMContentLoaded', function() {
     }, delay);
   }
 
-  function showWisdomTreeLinks() {
-    document.querySelector('.wisdom-tree-links').style.display = 'block';
-  }
+
+
+function showWisdomTreeLinks() {
+  document.querySelector('.wisdom-tree-links').style.display = 'block';
+
+  // Spawn wisdom bubble
+  const bubble = document.createElement('div');
+  bubble.className = 'thought-bubble wisdom-bubble';
+  bubble.style.position = 'fixed';
+  bubble.style.left = '45%';
+  bubble.style.top = '40%';
+  bubble.style.zIndex = 20;
+  bubble.style.pointerEvents = 'none';
+
+      
+  bubble.classList.add('bubble-left');
+   
+
+  const text = "You have reached the Wisdom Tree... What shall your next destination be?";
+
+  const span = document.createElement('span');
+  bubble.appendChild(span);
+  document.body.appendChild(bubble);
+
+  // Typewriter effect for wisdom bubble
+  let i = 0;
+  (function type() {
+    if (i <= text.length) {
+      span.textContent = text.slice(0, i);
+      i++;
+      setTimeout(type, 40 + Math.random() * 40);
+    }
+  })();
+}
+
 
   function hideWisdomTreeLinks() {
     document.querySelector('.wisdom-tree-links').style.display = 'none';
